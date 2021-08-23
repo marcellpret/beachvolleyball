@@ -1,9 +1,10 @@
-import * as React from "react";
+import { useState } from "react";
 import ReactMapGL, {
     Marker,
     Popup,
     ScaleControl,
     GeolocateControl,
+    PointerEvent,
 } from "react-map-gl";
 import secret from "./secrets.json";
 
@@ -30,12 +31,20 @@ const home = {
 };
 
 export default function Map() {
-    const [showPopup, togglePopup] = React.useState(false);
-    const [viewport, setViewport] = React.useState({
+    const [marker, setMarker] = useState([]);
+    console.log("marker: ", marker);
+
+    const [showPopup, togglePopup] = useState(false);
+    const [viewport, setViewport] = useState({
         latitude: 52.516806,
         longitude: 13.383309,
         zoom: 10,
     });
+
+    function handleClick(e) {
+        console.log("e: ", e.lngLat);
+        setMarker([e.lngLat]);
+    }
 
     return (
         <ReactMapGL
@@ -45,6 +54,7 @@ export default function Map() {
             mapStyle="mapbox://styles/mapbox/outdoors-v11"
             mapboxApiAccessToken={secret.MAP_TOKEN}
             onViewportChange={(viewport) => setViewport(viewport)}
+            onClick={handleClick}
         >
             <ScaleControl style={scaleControlStyle} />
             <GeolocateControl
@@ -72,19 +82,26 @@ export default function Map() {
                 >
                     <path d={ICON} />
                 </svg>
-                {showPopup && (
-                    <Popup
-                        latitude={home.latitude}
-                        longitude={home.longitude}
-                        closeButton={true}
-                        closeOnClick={false}
-                        onClose={() => togglePopup(false)}
-                        anchor="top"
-                    >
-                        <div>You are here</div>
-                    </Popup>
-                )}
             </Marker>
+            {marker &&
+                marker.map((m, i) => (
+                    <Marker key={i} longitude={m[0]} latitude={m[1]}>
+                        <svg
+                            height={ICON_SIZE}
+                            viewBox="0 0 24 24"
+                            style={{
+                                cursor: "pointer",
+                                fill: "fff",
+                                stroke: "none",
+                                transform: `translate(${
+                                    -ICON_SIZE / 2
+                                }px,${-ICON_SIZE}px)`,
+                            }}
+                        >
+                            <path d={ICON} />
+                        </svg>
+                    </Marker>
+                ))}
         </ReactMapGL>
     );
 }
