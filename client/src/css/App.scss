@@ -10,10 +10,10 @@ $bluesky: #61acd9;
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: "Quicksand", sans-serif;
 }
 
 body {
-    font-family: "Quicksand", sans-serif;
     color: $dark;
     background-image: linear-gradient(
         30deg,
@@ -31,10 +31,11 @@ main {
 }
 
 header {
-    margin-block: 2em;
+    margin-top: 2em;
+    margin-bottom: 1em;
 
     #search {
-        margin-top: 1em;
+        margin-block: 1em;
         padding: 0.5em;
         text-align: center;
         border: none;
@@ -56,4 +57,60 @@ header {
 .weather {
     margin-block: 1em;
     color: $sea;
+}
+
+.new-court {
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    input,
+    textarea {
+        padding: 0.5em;
+        border-radius: 5px;
+        width: 70%;
+        max-width: 400px;
+        border: none;
+        margin: 1em 0 2em 0;
+        resize: vertical;
+        font-family: "Quicksand", sans-serif;
+        &:focus {
+            outline: none;
+        }
+    }
+
+    textarea {
+        height: 5em;
+    }
+
+    .save {
+        padding: 0.5em 1.5em;
+        background-color: $sea;
+        color: $lightsky;
+        border: none;
+        border-radius: 200px;
+        font-size: 1.2em;
+        margin-bottom: 2em;
+    }
+    .star-rating {
+        button {
+            background-color: transparent;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            font-size: 2em;
+            padding: 0.2em;
+            margin-bottom: 0.5em;
+        }
+        .on {
+            color: $sand;
+            transition: all 100ms linear;
+            text-shadow: 2px 2px 5px rgba(0, 107, 137, 0.5);
+        }
+        .off {
+            color: $sea;
+            transition: all 100ms linear;
+        }
+    }
 }
