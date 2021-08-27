@@ -1,8 +1,14 @@
 import axios from "axios";
 
-export default function markersReducer(state = null, action) {
+export default function markersReducer(state = [], action) {
+    console.log("action: ", action);
+
     if (action.type === "markers/get") {
-        return [...state, action.payload.data];
+        return [...state, ...action.payload];
+    }
+
+    if (action.type === "markers/save") {
+        return [...state, action.payload];
     }
 
     // if (action.type === "user/offline") {
@@ -37,8 +43,29 @@ export default function markersReducer(state = null, action) {
 // }
 
 export function getMarkers(data) {
+    console.log("data in Action getMarkers: ", data);
+
     return {
         type: "markers/get",
         payload: data,
+    };
+}
+
+export function saveNewMarker(data) {
+    return async (dispatch) => {
+        try {
+            const newMarkerSaved = await axios.post(
+                "/api/save-new-court",
+                data
+            );
+            // return newMarkerSaved;
+        } catch (error) {
+            console.log(error);
+        }
+
+        dispatch({
+            type: "markers/save",
+            payload: data,
+        });
     };
 }

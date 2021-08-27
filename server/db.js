@@ -4,10 +4,10 @@ const db = spicedPg(
         "postgres:postgres:postgres@localhost:5432/beachvolleyball"
 );
 
-module.exports.createCourt = ({ name, geoJSON }) => {
+module.exports.createCourt = (name, description, foto, lat, lng, rating) => {
     return db.query(
-        "INSERT INTO courts (name, geoJSON) VALUES($1, ($2)::jsonb) RETURNING *",
-        [name, JSON.stringify(geoJSON)]
+        `INSERT INTO courts (name, description, foto, lat, lng,rating) VALUES($1, $2,$3,$4,$5, $6) RETURNING *`,
+        [name, description, foto, lat, lng, rating]
     );
 };
 

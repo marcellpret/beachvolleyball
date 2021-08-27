@@ -19,7 +19,10 @@
   },
   "homepage": "https://github.com/marcellpret/beachvolleyball#readme",
   "dependencies": {
+    "aws-sdk": "^2.977.0",
     "express": "^4.17.1",
-    "spiced-pg": "^1.0.4"
+    "multer": "^1.4.3",
+    "spiced-pg": "^1.0.4",
+    "uid-safe": "^2.1.5"
   }
 }

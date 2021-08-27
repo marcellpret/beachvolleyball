@@ -23,11 +23,13 @@ body {
         72.54069174309237%,
         rgba(21, 149, 190, 1) 100%
     );
-    min-height: 100vh;
 }
 
 main {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
 header {
@@ -46,12 +48,29 @@ header {
             outline: none;
         }
     }
+
+    .go {
+        padding: 0.5em;
+        aspect-ratio: 1/1;
+        height: 100%;
+        border-radius: 50%;
+        border: none;
+        background-color: $dark;
+        color: $sand;
+        margin-left: 0.5em;
+        transition: all 200ms linear;
+
+        &:hover {
+            border-radius: 30%;
+            color: $lightsky;
+        }
+    }
 }
 
 .map {
-    height: 60vh;
-    background: url("../images/map.png") center no-repeat;
     background-size: cover;
+    flex-grow: 1;
+    min-height: 100px;
 }
 
 .weather {
@@ -60,28 +79,63 @@ header {
 }
 
 .new-court {
+    position: absolute;
+    background-color: rgba(0, 107, 137, 0.8);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+
+    .box {
+        background-color: $lightsky;
+        width: 90vw;
+        max-width: 600px;
+        height: 90vh;
+        border-radius: 5px;
+        overflow-x: auto;
+        text-align: left;
+        position: relative;
+        display: grid;
+        place-items: center;
+    }
+
+    .close {
+        background-color: $dark;
+        color: $sand;
+        position: absolute;
+        bottom: 0;
+        text-align: center;
+        display: block;
+        width: 100%;
+        padding-block: 0.5em;
+    }
     form {
         display: flex;
         flex-direction: column;
         align-items: center;
-    }
-    input,
-    textarea {
-        padding: 0.5em;
-        border-radius: 5px;
-        width: 70%;
-        max-width: 400px;
-        border: none;
-        margin: 1em 0 2em 0;
-        resize: vertical;
-        font-family: "Quicksand", sans-serif;
-        &:focus {
-            outline: none;
-        }
-    }
+        width: 100%;
 
-    textarea {
-        height: 5em;
+        input,
+        textarea {
+            padding: 0.5em;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 400px;
+            border: none;
+            margin: 1em 0 2em 0;
+            resize: vertical;
+            font-family: "Quicksand", sans-serif;
+            &:focus {
+                outline: none;
+            }
+        }
+
+        textarea {
+            height: 5em;
+        }
     }
 
     .save {
@@ -91,8 +145,9 @@ header {
         border: none;
         border-radius: 200px;
         font-size: 1.2em;
-        margin-bottom: 2em;
+        margin-bottom: 3em;
     }
+
     .star-rating {
         button {
             background-color: transparent;
@@ -112,5 +167,55 @@ header {
             color: $sea;
             transition: all 100ms linear;
         }
+    }
+}
+
+.court-info {
+    position: absolute;
+    background-color: rgba(0, 107, 137, 0.8);
+    height: 100vh;
+    width: 100vw;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+
+    .box {
+        background-color: $lightsky;
+        width: 90vw;
+        max-width: 600px;
+        height: 90vh;
+        border-radius: 5px;
+        overflow-x: auto;
+        text-align: left;
+        position: relative;
+    }
+
+    img {
+        width: 100%;
+        height: 40%;
+        object-fit: cover;
+    }
+
+    .text {
+        padding: 1em;
+    }
+
+    h2 {
+        margin-bottom: 1em;
+    }
+
+    p {
+        margin-bottom: 1em;
+    }
+
+    .close {
+        background-color: $dark;
+        color: $sand;
+        position: absolute;
+        bottom: 0;
+        text-align: center;
+        display: block;
+        width: 100%;
+        padding-block: 0.5em;
     }
 }

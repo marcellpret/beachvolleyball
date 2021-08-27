@@ -5,14 +5,24 @@ import ReactMapGL, {
     ScaleControl,
     GeolocateControl,
 } from "react-map-gl";
+import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import secret from "./secrets.json";
 import { useDispatch, useSelector } from "react-redux";
 import { togglePopup } from "./redux/new_court/slice";
+import { newPin } from "./redux/pin/slice";
+import { toggleInfo } from "./redux/info/slice";
 
 const scaleControlStyle = {
     top: "1rem",
     right: "1rem",
 };
+
+const geocoder = new MapboxGeocoder({
+    accessToken: secret.MAP_TOKEN,
+    mapboxgl: ReactMapGL,
+});
+
+console.log("geocoder: ", geocoder);
 
 const geolocateStyle = {
     top: 0,
@@ -25,80 +35,90 @@ const ICON = `M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7
 
 const ICON_SIZE = 30;
 
-const home = {
-    name: "Home",
-    longitude: 13.32513734082113,
-    latitude: 52.45947396505051,
-};
+// const home = {
+//     name: "Home",
+//     longitude: 13.32513734082113,
+//     latitude: 52.45947396505051,
+// };
 
-export default function Map() {
-    const dispatch = useDispatch();
+export default function Map(props) {
+    const dispatch = useDispatch([]);
+    const markers = useSelector((state) => state.markers);
+    const pin = useSelector((state) => state.pin);
 
-    const [marker, setMarker] = useState([]);
-    console.log("marker: ", marker);
+    const location = props.location;
 
-    const [viewport, setViewport] = useState({
-        latitude: 52.516806,
-        longitude: 13.383309,
-        zoom: 10,
-    });
+    console.log("props.location: ", props.location);
 
     function openNewCourt(e) {
         console.log("e: ", e.lngLat);
-        setMarker([e.lngLat]);
         dispatch(togglePopup(true));
+        dispatch(newPin(e.lngLat));
+        // setMarker(e.lngLat);
     }
 
-    function closeNewCourt(e) {
-        e.stopPropagation();
+    function openInfo(idMarker) {
+        dispatch(toggleInfo(true, idMarker));
         dispatch(togglePopup(false));
-        setMarker(null);
+        dispatch(newPin([]));
     }
+
+    function viewportChange(newLocation) {
+        props.updateLocation(newLocation);
+    }
+
+    // function closeNewCourt(e) {
+    //     e.stopPropagation();
+    //     dispatch(togglePopup(false));
+    // }
 
     return (
-        <ReactMapGL
-            {...viewport}
-            width="100%"
-            height="60vh"
-            mapStyle="mapbox://styles/mapbox/outdoors-v11"
-            mapboxApiAccessToken={secret.MAP_TOKEN}
-            onViewportChange={(viewport) => setViewport(viewport)}
-            onClick={openNewCourt}
-        >
-            <ScaleControl style={scaleControlStyle} />
-            <GeolocateControl
-                style={geolocateStyle}
-                positionOptions={positionOptions}
-                trackUserLocation
-                auto
-            />
-            <Marker
-                key={home.name}
-                longitude={home.longitude}
-                latitude={home.latitude}
+        <div className="map">
+            <ReactMapGL
+                {...location}
+                width="100%"
+                height="100%"
+                mapStyle="mapbox://styles/mapbox/outdoors-v11"
+                mapboxApiAccessToken={secret.MAP_TOKEN}
+                onViewportChange={(location) => viewportChange(location)}
+                onClick={openNewCourt}
             >
-                <svg
-                    height={ICON_SIZE}
-                    viewBox="0 0 24 24"
-                    style={{
-                        cursor: "pointer",
-                        fill: "fff",
-                        stroke: "none",
-                        transform: `translate(${
-                            -ICON_SIZE / 2
-                        }px,${-ICON_SIZE}px)`,
-                    }}
-                >
-                    <path d={ICON} />
-                </svg>
-            </Marker>
-            {marker &&
-                marker.map((m, i) => (
+                <ScaleControl style={scaleControlStyle} />
+                <GeolocateControl
+                    style={geolocateStyle}
+                    positionOptions={positionOptions}
+                    trackUserLocation
+                    // auto
+                />
+                {markers.length !== 0 &&
+                    markers.map((marker) => (
+                        <Marker
+                            key={marker.id}
+                            longitude={parseFloat(marker.lng)}
+                            latitude={parseFloat(marker.lat)}
+                            onClick={() => openInfo(marker.id)}
+                        >
+                            <svg
+                                height={ICON_SIZE}
+                                viewBox="0 0 24 24"
+                                style={{
+                                    cursor: "pointer",
+                                    fill: "slateblue",
+                                    stroke: "none",
+                                    transform: `translate(${
+                                        -ICON_SIZE / 2
+                                    }px,${-ICON_SIZE}px)`,
+                                }}
+                            >
+                                <path d={ICON} />
+                            </svg>
+                        </Marker>
+                    ))}
+                {pin.length !== 0 && (
                     <Marker
-                        key={i}
-                        longitude={m[0]}
-                        latitude={m[1]}
-                        onClick={closeNewCourt}
+                        longitude={pin[0]}
+                        latitude={pin[1]}
+                        // onClick={closeNewCourt}
                     >
                         <svg
                             height={ICON_SIZE}
@@ -115,7 +135,8 @@ export default function Map() {
                             <path d={ICON} />
                         </svg>
                     </Marker>
-                ))}
-        </ReactMapGL>
+                )}
+            </ReactMapGL>
+        </div>
     );
 }
