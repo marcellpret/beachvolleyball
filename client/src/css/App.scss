@@ -4,7 +4,7 @@ $dark: #22201d;
 $sand: #fbc266;
 $sea: #006b89;
 $lightsky: #cee4f2;
-$bluesky: #61acd9;
+$bluesky: rgb(97, 172, 217);
 
 * {
     box-sizing: border-box;
@@ -23,6 +23,11 @@ body {
         72.54069174309237%,
         rgba(21, 149, 190, 1) 100%
     );
+}
+
+.flex {
+    display: flex;
+    align-items: center;
 }
 
 main {
@@ -64,6 +69,11 @@ header {
             border-radius: 30%;
             color: $lightsky;
         }
+    }
+
+    .logo {
+        width: 250px;
+        max-width: 100%;
     }
 }
 
@@ -198,14 +208,30 @@ header {
 
     .text {
         padding: 1em;
-    }
 
-    h2 {
-        margin-bottom: 1em;
-    }
+        h2 {
+            margin-bottom: 1em;
+        }
 
-    p {
-        margin-bottom: 1em;
+        p {
+            margin-bottom: 1em;
+        }
+
+        a {
+            text-decoration: none;
+            color: $sea;
+        }
+
+        svg {
+            fill: $sea;
+            margin-right: 0.5em;
+        }
+
+        .weather {
+            position: absolute;
+            right: 1em;
+            bottom: 2em;
+        }
     }
 
     .close {

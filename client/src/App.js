@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import InfoNewCourt from "./infoNewCourt";
 import { getMarkers } from "./redux/markers/slice";
 import secret from "./secrets.json";
+import logo from "./images/logo.png";
 
 function App() {
     const dispatch = useDispatch();
@@ -65,7 +66,7 @@ function App() {
     return (
         <main>
             <header>
-                <h1>Find your court</h1>
+                <img className="logo" src={logo} alt="" />
                 <form>
                     <input
                         type="text"
